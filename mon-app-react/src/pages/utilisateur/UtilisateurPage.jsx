@@ -11,7 +11,8 @@ const UtilisateurPage = () => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   const user = authService.getCurrentUser();
-  const departementId = user?.departement?.departement_id;
+  const departementId = user?.departement?.id;
+
 
   useEffect(() => {
     if (!token) {
@@ -57,6 +58,13 @@ const UtilisateurPage = () => {
   useEffect(() => {
     if (token) {
       fetchUtilisateurs();
+      console.log("Déclenchement fetchUtilisateurs avec : ", {
+  token,
+  role,
+  departementId,
+  user
+});
+
     }
   }, [token, role, departementId]);
 

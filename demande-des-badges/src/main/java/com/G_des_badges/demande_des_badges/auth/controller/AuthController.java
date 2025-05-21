@@ -1,6 +1,7 @@
 package com.G_des_badges.demande_des_badges.auth.controller;
 
 import com.G_des_badges.demande_des_badges.auth.dto.*;
+import com.G_des_badges.demande_des_badges.departement.dto.DepartementDTO;
 import com.G_des_badges.demande_des_badges.departement.entity.Departement;
 import com.G_des_badges.demande_des_badges.departement.repository.DepartementRepository;
 import com.G_des_badges.demande_des_badges.auth.security.JwtUtils;
@@ -44,13 +45,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request) {
-        // Utiliser le service plutôt que d'accéder directement au repository
+        // Authentification via le service
         Utilisateur utilisateur = utilisateurService.login(request);
 
-        // Générer le token
+        // Génération du token JWT
         String jwt = jwtUtils.generateToken(utilisateur);
 
-        // Créer la réponse (un seul objet de réponse)
+        // Création de la réponse
         AuthResponseDTO response = new AuthResponseDTO();
         response.setToken(jwt);
         response.setId(utilisateur.getId());
@@ -59,8 +60,19 @@ public class AuthController {
         response.setEmail(utilisateur.getEmail());
         response.setRole(utilisateur.getRole().name());
 
+        // ✅ Ajouter l'objet département (si présent)
+        if (utilisateur.getDepartement() != null) {
+            DepartementDTO departementDTO = new DepartementDTO();
+            departementDTO.setId(utilisateur.getDepartement().getDepartement_id());
+            departementDTO.setNomDepartement(utilisateur.getDepartement().getNomDepartement());
+            response.setDepartement(departementDTO);
+        } else {
+            response.setDepartement(null);
+        }
+
         return ResponseEntity.ok(response);
     }
+
 
 
 

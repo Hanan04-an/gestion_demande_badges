@@ -23,7 +23,6 @@ const ProtectedRoute = ({ allowedRoles }) => {
     
     // Sauvegarder dans localStorage pour que le reste de l'application fonctionne
     localStorage.setItem('role', role);
-    localStorage.setItem('token', 'bypass-token'); // Token fictif
     localStorage.setItem('nom', role); // Nom basé sur le rôle
     
     console.log('URL path:', path);

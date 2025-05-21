@@ -61,11 +61,15 @@ public class UtilisateurController {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         if (isSuperAdmin) {
-            utilisateurs = utilisateurRepository.findAll();
-        } else if (isAdmin) {
-            Long departementId = user.getDepartement().getDepartement_id();
-            utilisateurs = utilisateurRepository.findByDepartementIdAndRole(departementId, Role.EMPLOYEE);
-        } else {
+            utilisateurs = utilisateurRepository.findAll();}
+       else if (isAdmin) {
+                if (user.getDepartement() == null) {
+                    return List.of(); // Aucun département associé → aucun résultat
+                }
+
+                Long departementId = user.getDepartement().getDepartement_id();
+                utilisateurs = utilisateurRepository.findByDepartementIdAndRole(departementId, Role.EMPLOYEE);
+            } else {
             return List.of();
         }
 
